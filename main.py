@@ -1,18 +1,30 @@
 from os import environ
+from typing import *  # type: ignore
 
 import tweepy
 
-consumer_key = environ["TWITTER_BOT_API_KEY"]
-consumer_secret = environ["TWITTER_BOT_API_KEY_SECRET"]
-access_token = environ["TWITTER_BOT_ACCESS_TOKEN"]
-access_token_secret = environ["TWITTER_BOT_ACCESS_TOKEN_SECRET"]
 
+class Twitter:
+    def __init__(self):
+        self.api = self.get_twitter_api()
 
-auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
-api = tweepy.API(auth)
-# api.update_status('Hello, world!') # need ELEVATED PRIVILEGES
+    def get_twitter_api(self) -> tweepy.API:
+        consumer_key = environ["TWITTER_BOT_API_KEY"]
+        consumer_secret = environ["TWITTER_BOT_API_KEY_SECRET"]
+        access_token = environ["TWITTER_BOT_ACCESS_TOKEN"]
+        access_token_secret = environ["TWITTER_BOT_ACCESS_TOKEN_SECRET"]
+        auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
+        return tweepy.API(auth)
 
-user = "geoffreyhinton"
-for status in tweepy.Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items():
-    print(status.full_text)
-    break
+    def make_tweet(self, tweet: str) -> None:
+        self.api.update_status(tweet)
+
+    def print_user_tweet(self, user: str) -> None:
+        ans: List[str] = []
+        for status in tweepy.Cursor(self.api.user_timeline, screen_name=user, tweet_mode="extended").items():
+            print(status.full_text)
+            break
+
+if __name__ == '__main__':
+    Twitter().print_user_tweet("geoffreyhinton")
+    Twitter().make_tweet('Hello, world!')
