@@ -14,6 +14,7 @@ class Twitter:
         access_token = environ["TWITTER_BOT_ACCESS_TOKEN"]
         access_token_secret = environ["TWITTER_BOT_ACCESS_TOKEN_SECRET"]
         auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
+        auth.set_access_token(access_token, access_token_secret)
         return tweepy.API(auth)
 
     def make_tweet(self, tweet: str) -> None:
