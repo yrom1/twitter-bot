@@ -24,11 +24,16 @@ class Twitter:
     def make_tweet(self, tweet: str) -> None:
         self.api.update_status(tweet)
 
-    def print_user_tweet(self, user: str) -> None:
+    def get_tweet(self, user: str) -> None:
         ans: List[str] = []
         for status in tweepy.Cursor(self.api.user_timeline, screen_name=user, tweet_mode="extended").items():
-            print(status.full_text)
+            ans.append(status.full_text)
             break
+        return ans
+
+    def frens(self, user: str) -> List[str]:
+        return [x.screen_name for x in self.api.get_friends(screen_name=user)]
+
 
 class Db:
     def __init__(self) -> None:
@@ -64,5 +69,6 @@ class Db:
         return ans
 
 if __name__ == '__main__':
-    Twitter().print_user_tweet("geoffreyhinton")
-    Twitter().make_tweet('Hello, world!')
+    # Twitter().print_user_tweet("geoffreyhinton")
+    # Twitter().make_tweet('Hello, world!')
+    print(Twitter().frens("geoffreyhinton"))
