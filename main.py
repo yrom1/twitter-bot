@@ -69,6 +69,7 @@ class Db:
         return ans
 
 if __name__ == '__main__':
+    ...
     # Twitter().print_user_tweet("geoffreyhinton")
     # Twitter().make_tweet('Hello, world!')
-    print(Twitter().frens("geoffreyhinton"))
+    # print(Twitter().frens("geoffreyhinton"))
