@@ -9,6 +9,10 @@ from mysql.connector.connection import MySQLConnection
 
 
 class Twitter:
+    """
+    Twitter().make_tweet('Hello, world!')
+    Twitter().frens("geoffreyhinton")
+    """
     def __init__(self):
         self.api = self.get_twitter_api()
 
@@ -68,8 +72,14 @@ class Db:
         cur.close()
         return ans
 
+
+def write_geoffrey_hinton_friend_graph() -> None:
+    # TODO to get more people do friends of friends...
+    #      you'll want to set() the results when you do that!
+    with open('ml-ppl.txt', 'w') as f:
+        f.write('\n'.join(Twitter().frens("geoffreyhinton")))
+        f.write('\n')
+
 if __name__ == '__main__':
     ...
-    # Twitter().print_user_tweet("geoffreyhinton")
-    # Twitter().make_tweet('Hello, world!')
-    # print(Twitter().frens("geoffreyhinton"))
+
