@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 from os import environ
 from typing import *  # type: ignore
 
 import tweepy
+from mysql.connector import connect
+from mysql.connector.connection import MySQLConnection
 
 
 class Twitter:
@@ -25,6 +29,39 @@ class Twitter:
         for status in tweepy.Cursor(self.api.user_timeline, screen_name=user, tweet_mode="extended").items():
             print(status.full_text)
             break
+
+class Db:
+    def __init__(self) -> None:
+        self.conn = self._connect_rds_mysql()
+
+    def __enter__(self) -> Db:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        # TODO handle exceptions
+        self.conn.commit()
+        self.conn.close()
+
+    def _connect_rds_mysql() -> MySQLConnection:
+        RDS_ENDPOINT = environ["RDS_ENDPOINT"]
+        RDS_USER = environ["RDS_USER"]
+        RDS_PASSWORD = environ["RDS_PASSWORD"]
+        RDS_PORT = environ["RDS_PORT"]
+        environ["LIBMYSQL_ENABLE_CLEARTEXT_PLUGIN"] = "1"
+        connect(
+            host=RDS_ENDPOINT,
+            user=RDS_USER,
+            passwd=RDS_PASSWORD,
+            port=RDS_PORT,
+            database="twitter_bot",
+        )
+
+    def query(self, query: str, data=tuple()) -> List[Tuple]:
+        cur = self.conn.cursor()
+        cur.execute(query, data)
+        ans = cur.fetchall()
+        cur.close()
+        return ans
 
 if __name__ == '__main__':
     Twitter().print_user_tweet("geoffreyhinton")

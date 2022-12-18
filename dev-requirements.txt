@@ -2,3 +2,4 @@ cloud_dictionary
 mypy
 ty_command
 tweepy
+mysql-connector-python
