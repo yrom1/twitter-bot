@@ -111,9 +111,7 @@ class Database:
         )
 
     def insert_tweet_into_tweets_table(self, user: str, tweet: str) -> None:
-        print(1)
         cur = self.conn.cursor()
-        print(cur)
         cur.execute("""
         INSERT IGNORE INTO tweets(username, tweet_text)
         VALUES (%s, %s)
