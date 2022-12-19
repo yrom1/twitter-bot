@@ -1,0 +1,2 @@
+source ~/PRIVATE/STAR_SCHEMA_PRIVATE.sh
+mysql -D twitter_bot -h $RDS_ENDPOINT -u $RDS_USER -p$RDS_PASSWORD -P $RDS_PORT
