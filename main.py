@@ -68,9 +68,9 @@ class Twitter:
 
     def insert_users_tweets_into_db(self, user: str) -> None:
         tweets = self.get_tweets(user)
-        with self.db as db:
-            for tweet in tweets:
-                db.insert_tweet_into_tweets_table(user, tweet)
+        for tweet in tweets:
+            self.db.insert_tweet_into_tweets_table(user, tweet)
+        self.db.conn.commit()
 
 
     def get_users(self) -> List[str]:
@@ -80,21 +80,17 @@ class Twitter:
     def populate_db_with_users_tweets(self, users: List[str]) -> None:
         for user in users:
             self.insert_users_tweets_into_db(user)
-            if _DEBUG:
-                break
+
 
 @_debug
 class Database:
+    # Rather than doing some trickery about managing the connection with context managers,
+    # I'm just going to manage it manually for now, it's up to you to call:
+    # self.conn.commit()
+    # self.conn.close()
+    # when appropriate.
     def __init__(self) -> None:
         self.conn = self._connect_rds_mysql()
-
-    def __enter__(self) -> Database:
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback) -> None:
-        # TODO handle exceptions
-        self.conn.commit()
-        self.conn.close()
 
     def _connect_rds_mysql(self) -> MySQLConnection:
         RDS_ENDPOINT = environ["RDS_ENDPOINT"]
@@ -137,7 +133,9 @@ def write_geoffrey_hinton_friend_graph() -> None:
 def populate_db_with_users_tweets() -> None:
     t = Twitter()
     t.populate_db_with_users_tweets(t.get_users())
+    t.db.conn.commit()
+    t.db.conn.close()
 
 if __name__ == '__main__':
-    # write_geoffrey_hinton_friend_graph()
+    write_geoffrey_hinton_friend_graph()
     populate_db_with_users_tweets()
