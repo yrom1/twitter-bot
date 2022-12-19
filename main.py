@@ -135,6 +135,7 @@ def write_geoffrey_hinton_friend_graph() -> None:
     # TODO to get more people do friends of friends...
     #      you'll want to set() the results when you do that!
     with open(ML_PPL_FILE, 'w') as f:
+        f.write("geoffreyhinton\n")
         f.write('\n'.join(Twitter().frens("geoffreyhinton")))
         f.write('\n')
 
@@ -143,4 +144,5 @@ def populate_db_with_users_tweets() -> None:
     t.populate_db_with_users_tweets(t.get_users())
 
 if __name__ == '__main__':
+    # write_geoffrey_hinton_friend_graph()
     populate_db_with_users_tweets()
