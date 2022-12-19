@@ -61,8 +61,6 @@ class Twitter:
         ans: List[str] = []
         for status in tweepy.Cursor(self.api.user_timeline, screen_name=user, tweet_mode="extended").items():
             ans.append(status.full_text)
-            if _DEBUG:
-                break
         return ans
 
     def frens(self, user: str) -> List[str]:
@@ -70,11 +68,10 @@ class Twitter:
 
     def insert_users_tweets_into_db(self, user: str) -> None:
         tweets = self.get_tweets(user)
-        for tweet in tweets:
-            with self.db as db:
+        with self.db as db:
+            for tweet in tweets:
                 db.insert_tweet_into_tweets_table(user, tweet)
-                if _DEBUG:
-                    break
+
 
     def get_users(self) -> List[str]:
         with open(ML_PPL_FILE, 'r') as f:
