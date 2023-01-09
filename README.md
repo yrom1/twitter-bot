@@ -25,3 +25,7 @@ tweet_text: ... and so.e of those tasks are clearly algorithmic in nature (eg pe
 5/n
 ```
 😹
+
+# Mon Jan 9
+
+4000 char tweets are happening: https://twitter.com/elonmusk/status/1612257085764341761 😫
